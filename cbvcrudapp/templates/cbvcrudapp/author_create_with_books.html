@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Create Authors and Books</title>
+</head>
+<body>
+<p><a href="{% url 'cbvcrudapp-authors' %}">Authors</a></p>
+{% if form.is_multipart %}
+    <form enctype="multipart/form-data" method="post" action="">{% csrf_token %}
+{% else %}
+    <form method="post" action="">{% csrf_token %}
+{% endif %}
+<p>Author</p>
+{{ main_form }}
+<div id="inline-forms">
+    <p>Author's Books</p>
+    {{ inline_forms.management_form }}
+    {% for book_form in inline_forms %}
+    <div class="inline-form">
+        {{ book_form }}
+        <button class="remove">Remove</button>
+        <hr>
+    </div>
+    {% endfor %}
+</div>
+<button id="add-inline-form">Insert book</button>
+<input type="submit" value="Submit" />
+</form>
+<script src="{{ STATIC_URL }}js/jquery-1.9.1.min.js"></script>
+<script>
+    (function ($) {
+        $(function () {
+            var inlineFormsId = "#inline-forms",
+                inlineFormClass = ".inline-form",
+                emptyInlineForm = $(inlineFormClass + ":last").clone(false).eq(0);
+
+            function replaceAttributes(form, formIndex){
+                $("*", form).each(function(index, elm){
+                    var attrs = {};
+                    $.each(elm.attributes, function(index, attr){
+                        if(!attr.specified){
+                            return;
+                        }
+                        if(attr.value.match(/{{ inline_forms.prefix }}-\d/)){
+                            attrs[attr.name] = attr.value.replace(
+                                /{{ inline_forms.prefix }}-\d/,
+                                "{{ inline_forms.prefix }}-" + formIndex);
+                        }
+                    });
+                    $(elm).attr(attrs);
+                });
+            }
+
+            function removeInlineForm(button){
+                var button = $(button),
+                    inlineForms;
+
+                button.parents(inlineFormClass).remove();
+
+                inlineForms = $(inlineFormClass);
+                inlineForms.each(function(index, form){
+                    replaceAttributes(form, index);
+                });
+
+                $("#id_{{ inline_forms.prefix }}-TOTAL_FORMS").val(inlineForms.length);
+            }
+
+            function addInlineForm(){
+                var newForm = emptyInlineForm.clone(false).eq(0);
+
+                replaceAttributes(newForm, $(inlineFormClass).length);
+                $(".errorlist", newForm).remove();
+                newForm.children().removeClass("error");
+
+                newForm.appendTo($(inlineFormsId));
+
+                $("#id_{{ inline_forms.prefix }}-TOTAL_FORMS").val(
+                    $(inlineFormClass).length);
+
+            }
+
+            $(inlineFormClass).on('click', 'button', function(event){
+                event.preventDefault();
+                removeInlineForm(this);
+            });
+
+            $("#add-inline-form").on('click', function(event){
+                event.preventDefault();
+                addInlineForm();
+            });
+        });
+    })(jQuery);
+</script>
+</body>
+</html>

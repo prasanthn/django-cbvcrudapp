@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Authors</title>
+</head>
+<body>
+<p><a href="{% url 'cbvcrudapp-author-create' %}">New</a></p>
+<ul>
+    {% for author in author_list %}
+    <li><a href="{% url 'cbvcrudapp-author-details' author.id %}">{{ author }}</a></li>
+    {% endfor %}
+</ul>
+</body>
+</html>

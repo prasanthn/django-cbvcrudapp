@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Author</title>
+</head>
+<body>
+    <p><a href="{% url 'cbvcrudapp-authors' %}">Authors</a></p>
+    Name: {{ author.name }}
+    <p>Books</p>
+    <ul>
+    {% for book in  author.books.all %}
+        <li>{{ book.title }}</li>
+    {% empty %}
+        <li>No books for this author</li>
+    {% endfor %}
+    </ul>
+<p>
+    <a href="{% url 'cbvcrudapp-author-update' author.id %}">Update</a>
+    <a href="{% url 'cbvcrudapp-author-delete' author.id %}">Delete</a>
+</p>
+</body>
+</html>
