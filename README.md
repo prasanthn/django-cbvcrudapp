@@ -5,7 +5,7 @@ This repo is a demo of a CRUD app using Django's class based views.
 Look at ``cbvcrudapp.urls`` too see how the views are setup.
 
 The module ``cbvcrudapp.views`` contains the views ``InlineObjectsCreateView``
-and ``InlineObjectsUpdateView`` that allow us to simulatneously update a model
+and ``InlineObjectsUpdateView`` that allow us to simultaneously update a model
 and instances of another model that has a foreign key pointing to it.
 
 The templates in ``cbvcrudapp/templates`` has JavaScript embedded in them that
