@@ -6,11 +6,7 @@
 </head>
 <body>
 <p><a href="{% url 'cbvcrudapp-authors' %}">Authors</a></p>
-{% if form.is_multipart %}
-    <form enctype="multipart/form-data" method="post" action="">{% csrf_token %}
-{% else %}
-    <form method="post" action="">{% csrf_token %}
-{% endif %}
+    <form method="post" action="" {% if form.is_multipart %} enctype="multipart/form-data" {% endif %}>{% csrf_token %}
 <p>Author</p>
 {{ main_form }}
 <div id="inline-forms">
